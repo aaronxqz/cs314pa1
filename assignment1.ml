@@ -22,35 +22,49 @@ let rec print_string_list lst =
 (********************)
 
 let rec pow x p =
-  0
+  if x = 0 then 0
+  else if p = 0 then 1
+  else if p = 1 then x
+  else x * pow x (p - 1)
+
 
 (********************)
 (* Problem 2: range *)
 (********************)
 
 let rec range num1 num2 =
-  []
+  if num2 < num1 then []
+  else num1::range (num1 + 1) num2
 
 (**********************)
 (* Problem 3: flatten *)
 (**********************)
 
 let rec flatten l =
-  []
+  match l with
+  | [] -> []
+  | h :: t -> h @ flatten t 
 
 (*****************************)
 (* Problem 4: remove_stutter *)
 (*****************************)
 
 let rec remove_stutter l =
-  []
+  match l with
+  | [] -> []
+  | [x] -> [x]
+  | x :: y :: t -> 
+      if x = y then remove_stutter (y :: t)
+      else x :: remove_stutter (y :: t)
 
 (*********************)
 (* Problem 5: rotate *)
 (*********************)
 
 let rotate l n =
-  []
+  match l with
+  | [] -> []
+  | 
 
 (*******************)
 (* Problem 6: jump *)
