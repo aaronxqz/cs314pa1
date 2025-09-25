@@ -62,16 +62,25 @@ let rec remove_stutter l =
 (*********************)
 
 let rotate l n =
-  match l with
-  | [] -> []
-  | 
+  let len = List.length l in
+  let k = len - n in
+  let rec split i lst =
+    match i, lst with
+    | 0, _ -> ([], lst)
+    | _, [] -> ([], [])
+    | i, h::t ->
+        let (lf, ri) = split (i - 1) t in
+        (h::lf, ri)
+  in
+  let (left, right) = split k l in
+  right @ left 
 
 (*******************)
 (* Problem 6: jump *)
 (*******************)
 
 let jump lst1 lst2 =
-  []
+ 
 
 (******************)
 (* Problem 7: nth *)
