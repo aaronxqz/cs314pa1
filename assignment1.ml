@@ -79,15 +79,61 @@ let rotate l n =
 (* Problem 6: jump *)
 (*******************)
 
+(*let jump lst1 lst2 =
+  let index = 1 in
+  let rec split i l1 l2 =
+    let k = (i mod 2) in
+    match k, l1, l2 with
+      | (_, [], _) -> []
+      | (_, _, []) -> []
+      | (1, x::y, h::t) -> 
+          let ele = split (i + 1) y t in
+          h::ele
+      | (0, h::t, x::y) ->
+          let ele = split (i + 1) t y in
+          h::ele
+  in
+  split index lst1 lst2
+*)
+
 let jump lst1 lst2 =
- 
+  let rec combine i l1 l2 =
+    match (l1, l2) with
+    | (_, []) | ([], _) -> []
+    | (h1::t1, h2::t2) ->
+        if (i + 1) mod 2 = 1
+        then h2::combine (i + 1) t1 t2
+        else h1::combine (i + 1) t1 t2
+  in
+  combine 0 lst1 lst2
+
 
 (******************)
 (* Problem 7: nth *)
 (******************)
 
+(*let nth l n =
+  let k = n in
+  let rec combine n l = 
+    match (k, l) with
+    | (_, []) -> []
+    | (1, h::t) -> 
+      let k = n in h::combine k t
+    | (_, _) -> let k = k - 1 in combine n  
+  in
+  combine n l
+*)
+
 let nth l n =
-  []
+  let rec combine i lst=
+    match lst with
+    | [] -> []
+    | h::t ->
+        if i mod n = n - 1
+        then h :: combine (i + 1) t
+        else combine (i + 1) t
+  in
+  combine 0 l
 
 (*****************************************************)
 (* Problem 8: Digital Roots and Additive Persistence *)
@@ -99,9 +145,21 @@ let nth l n =
  * e.g. (digits 31243) is [3,1,2,4,3]
  *)
 
-let rec digitsOfInt n =
-  []
+(*let rec digitsOfInt n =
+  if n < 0 then []
+  else if n < 10 the [n]
+  else digitsOfInt (n/10) @ [n mod 10]
+*)
 
+
+let rec digitsOfInt n =
+  if n < 0 then []
+  else
+    let rec aux m acc =
+      if m = 0 then acc
+      else aux (m / 10) ((m mod 10) :: acc)
+    in
+    if n = 0 then [0] else aux n []
 
 (* From http://mathworld.wolfram.com/AdditivePersistence.html
  * Consider the process of taking a number, adding its digits,
@@ -114,11 +172,23 @@ let rec digitsOfInt n =
  * 9876 has an additive persistence of 2 and a digital root of 3.
  *)
 
-let additivePersistence n =
-  (-1)
+let rec sum lst =
+  match lst with
+  | [] -> 0
+  | h::t -> h + sum t
 
-let digitalRoot n =
-  (-1)
+let additivePersistence n =
+  let rec acc m count =
+    if m < 10 then count
+    else
+      let s = sum (digitsOfInt m) in
+      acc s (count + 1)
+  in
+  acc n 0
+
+let rec digitalRoot n =
+  if n < 10 then n
+  else digitalRoot (sum (digitsOfInt n))
 
 (********)
 (* Done *)
